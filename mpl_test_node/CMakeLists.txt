@@ -5,7 +5,7 @@ project(mpl_test_node)
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-deprecated-declarations")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wno-deprecated-declarations")
 
 execute_process(COMMAND lsb_release -cs
     OUTPUT_VARIABLE LSB_RELEASE_ID_SHORT

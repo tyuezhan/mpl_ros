@@ -14,9 +14,10 @@ Packages:
 
 ## Installation
 #### Dependancy:
-  - `ROS`(Indigo+)
+  - `ROS`(Noetic)
   - [`catkin_simple`](https://github.com/catkin/catkin_simple)
   - [`SDL`](`sudo apt install -y libsdl1.2-dev libsdl-image1.2-dev`)
+  - VTK (https://vtk.org/download/)
 
 ##### Compile
 Before compiling, make sure submodules are on their corresponding commits.
