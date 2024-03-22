@@ -13,6 +13,6 @@
   <depend>pcl_ros</depend>
   <depend>eigen_conversions</depend>
   <depend>motion_primitive_library</depend>
-  <depend>decomp_util</depend>
+  <depend>decomp_ros_utils</depend>
 
 </package>
