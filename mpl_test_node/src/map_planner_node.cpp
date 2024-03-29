@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
   ros::Publisher cloud_pub =
       nh.advertise<sensor_msgs::PointCloud>("cloud", 1, true);
   ros::Publisher prs_pub =
-      nh.advertise<planning_ros_msgs::PrimitiveArray>("primitives", 1, true);
+      nh.advertise<planning_ros_msgs::PrimitiveArray>("0", 1, true);
   ros::Publisher traj_pub =
       nh.advertise<planning_ros_msgs::Trajectory>("trajectory", 1, true);
   ros::Publisher refined_traj_pub = nh.advertise<planning_ros_msgs::Trajectory>(
