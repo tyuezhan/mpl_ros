@@ -6,3 +6,4 @@ float64[] cz
 float64[] cyaw
 # t is the execution time
 float64 t
+bool control_car

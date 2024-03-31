@@ -34,6 +34,30 @@ inline planning_ros_msgs::Primitive toPrimitiveROSMsg(const Primitive2D &pr,
 
 /// Primitive3D to primitive ROS message
 inline planning_ros_msgs::Primitive toPrimitiveROSMsg(const Primitive3D &pr) {
+  if (pr.control_ == Control::CAR) {
+    // For CAR cases, we only store u_v in x and y. u_w in cyaw.
+    Vec2f U = pr.pr_car().coeff();
+    Vec4f p_zero = pr.pr_car().p_zero();
+    // U is u_v, u_w
+    // P_zero is x, y, z, theta_0
+
+    planning_ros_msgs::Primitive msg;
+    msg.cx.resize(2); // u_v, x_0
+    msg.cy.resize(2); // u_v, y_0
+    msg.cz.resize(2); // 0, z_0
+    msg.cyaw.resize(2); // u_w, theta_0
+
+    msg.cx[0] = U(0);
+    msg.cx[1] = p_zero(0);
+    msg.cy[0] = U(0);
+    msg.cy[1] = p_zero(1);
+    msg.cz[1] = p_zero(2);
+    msg.cyaw[0] = U(1);
+    msg.cyaw[1] = p_zero(3);
+    msg.t = pr.t();
+    msg.control_car = true;
+    return msg;
+  }
   const auto cx = pr.pr(0).coeff();
   const auto cy = pr.pr(1).coeff();
   const auto cz = pr.pr(2).coeff();
@@ -130,20 +154,31 @@ inline Primitive2D toPrimitive2D(const planning_ros_msgs::Primitive &pr) {
 
 /// ROS message to Primitive3D class
 inline Primitive3D toPrimitive3D(const planning_ros_msgs::Primitive &pr) {
-  Vec6f cx, cy, cz, cyaw;
-  for (int i = 0; i < 6; i++) {
-    cx(i) = pr.cx[i];
-    cy(i) = pr.cy[i];
-    cz(i) = pr.cz[i];
-    cyaw(i) = pr.cyaw[i];
-  }
-  vec_E<Vec6f> cs;
-  cs.push_back(cx);
-  cs.push_back(cy);
-  cs.push_back(cz);
-  cs.push_back(cyaw);
+  //TODO handle Control::CAR differently here
+  if (pr.control_car) {
+    // Recover the input p, u_v and u_w from pr.cx, cy, cz, cyaw
+    // cx has u_v, x_0
+    // cy has u_v, y_0
+    // cz has -0, z_0
+    // cyaw has u_w, theta_0
+    return Primitive3D(pr.cx[1], pr.cy[1], pr.cz[1], pr.cyaw[1], pr.cx[0], pr.cyaw[0], pr.t);
+  } else {
+    Vec6f cx, cy, cz, cyaw;
+    for (int i = 0; i < 6; i++) {
+      cx(i) = pr.cx[i];
+      cy(i) = pr.cy[i];
+      cz(i) = pr.cz[i];
+      cyaw(i) = pr.cyaw[i];
+    }
+    vec_E<Vec6f> cs;
+    cs.push_back(cx);
+    cs.push_back(cy);
+    cs.push_back(cz);
+    cs.push_back(cyaw);
 
-  return Primitive3D(cs, pr.t, Control::SNPxYAW);
+    return Primitive3D(cs, pr.t, Control::SNPxYAW);
+  }
+  
 }
 
 /// ROS message to Trajectory2D class
