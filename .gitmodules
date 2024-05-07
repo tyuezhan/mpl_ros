@@ -1,6 +1,6 @@
 [submodule "DecompROS"]
 	path = DecompROS
-	url = git@github.com:tyuezhan/DecompROS.git
+	url = https://github.com/tyuezhan/DecompROS.git
 [submodule "motion_primitive_library"]
 	path = motion_primitive_library
-	url = git@github.com:tyuezhan/motion_primitive_library.git
+	url = https://github.com/tyuezhan/motion_primitive_library.git
